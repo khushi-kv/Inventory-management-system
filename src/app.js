@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-
+import productRoutes from "./routes/products.js";
 const app=express();
 
 //middlewares
@@ -16,4 +16,5 @@ app.get("/health",(req,res)=>{
     });
 });
 
+app.use("/products",productRoutes)
 export default app;
