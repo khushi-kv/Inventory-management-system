@@ -16,5 +16,5 @@ app.get("/health",(req,res)=>{
     });
 });
 
-app.use("/products",productRoutes)
+app.use("/api/products",productRoutes)
 export default app;
