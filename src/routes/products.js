@@ -6,11 +6,15 @@ import {
   updateProduct,
   deleteProduct
 } from "../controllers/products.js";
+import { validateObjectId } from "../middleware/validateObjectId.js";
 const router = express.Router();
 
 router.route("/").post(createProduct).get(getProducts);
 
-router.get("/:id", getProductId);
-router.put("/:id", updateProduct);
-router.delete("/:id",deleteProduct);
+router.get("/:id", validateObjectId, getProductId);
+
+router.put("/:id", validateObjectId, updateProduct);
+
+router.delete("/:id", validateObjectId, deleteProduct);
+
 export default router;

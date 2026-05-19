@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import productRoutes from "./routes/products.js";
+import { errorHandler } from "./middleware/errorMiddleware.js";
 const app=express();
 
 //middlewares
@@ -17,4 +18,5 @@ app.get("/health",(req,res)=>{
 });
 
 app.use("/api/products",productRoutes)
+app.use(errorHandler);
 export default app;

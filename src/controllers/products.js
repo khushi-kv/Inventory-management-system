@@ -1,141 +1,57 @@
 import mongoose from "mongoose";
 import Product from "../models/product.js";
-export const createProduct = async (req, res) => {
-  try {
-    const product = await Product.create(req.body);
+import { apiResponse } from "../utils/apiResponse.js";
+import { asyncHandler } from "../middleware/asyncHandler.js";
 
-    res.status(201).json({
-      success: true,
-      data: product,
-    });
-  } catch (error) {
-    if (error.name === "ValidationError") {
-      return res.status(400).json({
-        success: false,
-        message: error.message,
-      });
-    }
+// CREATE PRODUCT
+export const createProduct = asyncHandler(async (req, res) => {
+  const product = await Product.create(req.body);
+  return apiResponse(res, 201, true, "Product created successfully", product);
+});
 
-    return res.status(500).json({
-      success: false,
-      message: "Internal server error",
-    });
+// GET ALL PRODUCTS
+export const getProducts = asyncHandler(async (req, res) => {
+  const products = await Product.find();
+  return apiResponse(res, 200, true, "Products fetched", products);
+});
+
+// GET SINGLE PRODUCT BY ID
+export const getProductId = asyncHandler(async (req, res) => {
+  const product = await Product.findById(req.params.id);
+
+  if (!product) {
+    return apiResponse(res, 404, false, "Product not found");
   }
-};
 
-export const getProducts = async (req, res) => {
-  try {
-    const products = await Product.find();
+  return apiResponse(res, 200, true, "Product fetched", product);
+});
 
-    res.status(200).json({
-      success: true,
-      count: products.length,
-      data: products,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-    });
-  }
-};
-
-export const getProductId = async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.id);
-    if (!product) {
-      return res.status(404).json({
-        success: false,
-        message: "Product not found",
-      });
-    }
-
-    res.status(200).json({
-      success: true,
-      message: product,
-    });
-  } catch (err) {
-    res.status(400).json({
-      success: false,
-      message: "Invalid Product ID",
-    });
-  }
-};
-
-export const updateProduct = async (req, res) => {
-  try {
+// UPDATE PRODUCT
+export const updateProduct = asyncHandler(async (req, res) => {
     const { id } = req.params;
-
-    //check if id is valid mongo objectid
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid Product ID format",
-      });
+    const updatedProduct = await Product.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!updatedProduct) {
+      return apiResponse(res, 404, false, "Product not found");
     }
-
-    //update with proper options
-
-    const updatedProduct = await Product.findByIdAndUpdate(
-      id,
-      req.body,
-
-      {
-        new: true, //return updated document not stale
-        runValidators: true, // apply schema validations on update (required and all stuffs)
-      },
+    return apiResponse(
+      res,
+      200,
+      true,
+      "Product updated successfully",
+      updatedProduct,
     );
 
-    if (!updatedProduct) {
-      return res.status(404).json({
-        success: false,
-        message: "Product not found",
-      });
-    }
+});
 
-    res.status(200).json({
-      success: true,
-      data: updateProduct,
-    });
-  } catch (err) {
-    res.status(500).json({
-      success: false,
-      message: "Internal server error",
-    });
-  }
-};
+// DELETE PRODUCT
 export const deleteProduct = async (req, res) => {
-  try {
     const { id } = req.params;
-
-    //check if id is valid mongo objectid
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid Product ID format",
-      });
-    }
-
     const deletedProduct = await Product.findByIdAndDelete(id);
-
     if (!deletedProduct) {
-      return res.json(404).json({
-        success: false,
-        message: "Product not found!",
-      });
+      return apiResponse(res, 404, false, "Product not found");
     }
-
-    res.status(200).json({
-      success: true,
-      message: "Product deleted successfully",
-    });
-  } catch (err) {
-    (res.status(500),
-      json({
-        success: false,
-        message: "Internal server error",
-      }));
-  }
+    return apiResponse(res, 200, true, "Product deleted successfully");
 };
