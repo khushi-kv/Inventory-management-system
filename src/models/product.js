@@ -1,27 +1,38 @@
 import mongoose from "mongoose";
+
 const productSchema = new mongoose.Schema(
   {
     name: {
       type: String,
+      required: [true, "Product name is required"],
       trim: true,
-      required: true,
+      minlength: [3, "Name must be at least 3 characters"],
+      maxlength: [100, "Name cannot exceed 100 characters"],
     },
+
     price: {
       type: Number,
-      required: true,
+      required: [true, "Price is required"],
+      min: [0, "Price cannot be negative"],
     },
+
     description: {
       type: String,
-      required: true,
+      maxlength: [500, "Description too long"],
     },
+
+    category: {
+      type: String,
+      required: true,
+      enum: ["electronics", "fashion", "grocery", "other"],
+    },
+
     inStock: {
       type: Boolean,
       default: true,
     },
   },
-  {
-    timestamps: true,
-  },
+  { timestamps: true }
 );
-const Product = mongoose.model("Product", productSchema);
-export default Product;
+
+export default mongoose.model("Product", productSchema);
