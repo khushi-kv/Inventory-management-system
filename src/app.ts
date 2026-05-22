@@ -4,6 +4,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 
 import productRouter from "./products/product.module.js";
+import authRouter from "./users/auth.module.js"
 import { swaggerSpec } from "./config/swagger.js";
 import swaggerUi from "swagger-ui-express";
 // console.log("NODE_ENV in app.ts:", process.env.NODE_ENV);
@@ -45,5 +46,5 @@ app.use("/api/v1/products", productRouter);
  * Swagger Docs
  */
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
+app.use("/api/v1/auth", authRouter);
 export default app;
