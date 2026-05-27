@@ -8,7 +8,7 @@ A backend project built with **Node.js, Express, TypeScript, and MongoDB** follo
 - **Framework:** Express 5
 - **Language:** TypeScript
 - **Database:** MongoDB (Mongoose ODM)
-- **Auth:** bcryptjs (password hashing), jsonwebtoken (JWT — soon)
+- **Auth:** bcryptjs (password hashing), jsonwebtoken (JWT)
 - **Docs:** Swagger (swagger-jsdoc + swagger-ui-express)
 - **Middleware:** cors, helmet, morgan
 
@@ -37,9 +37,11 @@ Server runs at `http://localhost:5001`.
 
 ### Auth
 
-| Method | Endpoint         | Description         |
-| ------ | ---------------- | ------------------- |
-| POST   | `/auth/register` | Register a new user |
+| Method | Endpoint         | Description            |
+| ------ | ---------------- | ---------------------- |
+| POST   | `/auth/register` | Register a new user    |
+| POST   | `/auth/login`    | Login, returns JWT     |
+| POST   | `/auth/logout`   | Logout (auth required) |
 
 ### Docs
 
@@ -55,8 +57,6 @@ Request → Router → Controller → Service → Repository → Mongoose Model
 
 ## Next Up
 
-- Login / JWT authentication
-- Auth middleware & route guards
-- Role-based access control (admin/user)
-- Error handler wiring
-- Validation improvements
+- Role-based access control (admin/user) on product routes
+- Password reset flow
+- Rate limiting
