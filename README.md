@@ -1,46 +1,62 @@
-🚀 Backend Project - Node.js + Express
+# Product Inventory API
 
-This is a backend project built to learn and practice core backend fundamentals using Node.js and Express. It includes basic server setup, middleware configuration, and a sample API endpoint.
+A backend project built with **Node.js, Express, TypeScript, and MongoDB** following a layered architecture (Controller → Service → Repository).
 
-🧠 Tech Stack
-Node.js
-Express.js
-CORS
-Nodemon
+## Tech Stack
 
+- **Runtime:** Node.js
+- **Framework:** Express 5
+- **Language:** TypeScript
+- **Database:** MongoDB (Mongoose ODM)
+- **Auth:** bcryptjs (password hashing), jsonwebtoken (JWT — soon)
+- **Docs:** Swagger (swagger-jsdoc + swagger-ui-express)
+- **Middleware:** cors, helmet, morgan
 
-🚀 Setup Instructions
-1. Install dependencies
+## Setup
+
+```bash
 npm install
-2. Run the server (development mode)
-npm run dev
-3. Server URL
-http://localhost:5001
+npm run dev      # development (tsx watch)
+npm run build    # production build
+npm start        # run compiled JS
+```
 
+Server runs at `http://localhost:5001`.
 
-📌 API Endpoints
-Health Check
+## APIs (`/api/v1`)
 
-GET /health
+### Products
 
-Response
-{
-  "message": "OK"
-}
+| Method | Endpoint        | Description                                     |
+| ------ | --------------- | ----------------------------------------------- |
+| POST   | `/products`     | Create a product                                |
+| GET    | `/products`     | List products (paginated, filterable, sortable) |
+| GET    | `/products/:id` | Get product by ID                               |
+| PUT    | `/products/:id` | Update product                                  |
+| DELETE | `/products/:id` | Delete product                                  |
 
-🧩 Features Implemented
+### Auth
 
-Express server setup from scratch
-ES Modules configuration (type: module)
-Middleware setup (cors, express.json)
-Basic API endpoint creation
-Nodemon for development auto-reload
-Port conflict resolution during setup
+| Method | Endpoint         | Description         |
+| ------ | ---------------- | ------------------- |
+| POST   | `/auth/register` | Register a new user |
 
+### Docs
 
-🔄 Next Improvements
-Implement REST API architecture (routes → controllers → services)
-Add real APIs (e.g., memes, users)
-Integrate database (MongoDB)
-Add validation and error handling
-Improve folder structure for scalability
+| Method | Endpoint    | Description |
+| ------ | ----------- | ----------- |
+| GET    | `/api-docs` | Swagger UI  |
+
+## Architecture
+
+```
+Request → Router → Controller → Service → Repository → Mongoose Model
+```
+
+## Next Up
+
+- Login / JWT authentication
+- Auth middleware & route guards
+- Role-based access control (admin/user)
+- Error handler wiring
+- Validation improvements
