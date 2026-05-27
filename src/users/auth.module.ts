@@ -6,7 +6,10 @@
  */
 
 import { Router } from "express";
-import { registerUser } from "./auth.controller.js";
+import {
+    registerUser,
+    loginUser,
+  } from "./auth.controller.js";
 
 const router = Router();
 
@@ -39,5 +42,29 @@ const router = Router();
  */
 
 router.post("/register", registerUser);
-
+/**
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     summary: Login user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *             required:
+ *               - email
+ *               - password
+ *     responses:
+ *       200:
+ *         description: Login successful
+ */
+router.post("/login", loginUser);
 export default router;
