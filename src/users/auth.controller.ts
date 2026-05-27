@@ -22,7 +22,7 @@ export const registerUser = asyncHandler(
 export const loginUser = asyncHandler(
   async (req: Request, res: Response) => {
     const { valid, errors, data } = validateLogin(req.body);
-
+     
     // Validation check
     if (!valid) {
       return apiResponse(
@@ -46,6 +46,19 @@ export const loginUser = asyncHandler(
       true,
       "Login successful",
       loginData
+    );
+  }
+
+  
+);
+
+export const logoutUser = asyncHandler(
+  async (_req: Request, res: Response) => {
+    return apiResponse(
+      res,
+      200,
+      true,
+      "Logout successful"
     );
   }
 );

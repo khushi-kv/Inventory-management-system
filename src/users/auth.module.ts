@@ -6,10 +6,8 @@
  */
 
 import { Router } from "express";
-import {
-    registerUser,
-    loginUser,
-  } from "./auth.controller.js";
+import { registerUser, loginUser, logoutUser } from "./auth.controller.js";
+import { authMiddleware } from "../common/middleware/authMiddleware.js";
 
 const router = Router();
 
@@ -67,4 +65,25 @@ router.post("/register", registerUser);
  *         description: Login successful
  */
 router.post("/login", loginUser);
+
+
+/**
+ * @swagger
+ * /auth/logout:
+ *   post:
+ *     summary: Logout user
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Logout successful
+ *       401:
+ *         description: Unauthorized
+ */
+router.post(
+    "/logout",
+    authMiddleware,
+    logoutUser
+  );
 export default router;

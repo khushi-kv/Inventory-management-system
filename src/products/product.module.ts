@@ -15,6 +15,7 @@ import {
 } from "./product.controller.js";
 import { validateObjectId } from "../common/middleware/validateObjectId.js";
 
+import { authMiddleware } from "../common/middleware/authMiddleware.js";
 const router = Router();
 /**
  * @swagger
@@ -42,7 +43,7 @@ const router = Router();
  *       201:
  *         description: Product created successfully
  */
-router.route("/").post(createProduct).get(getProducts);
+router.route("/").post(authMiddleware, createProduct).get(getProducts);
 
 /**
  * @swagger
