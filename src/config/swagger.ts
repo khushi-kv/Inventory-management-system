@@ -12,10 +12,26 @@ const options: swaggerJsdoc.Options = {
       {
         url: "http://localhost:5001/api/v1",
       },
-    ], 
+    ],
+
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+
+    //  (recommended for protected APIs)
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
   },
   apis: ["src/**/*.module.ts"],
-
 };
 
 export const swaggerSpec = swaggerJsdoc(options);
