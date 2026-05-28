@@ -4,7 +4,7 @@ export interface CreateProductDTO {
   price: number;
   description?: string;
   category: "electronics" | "fashion" | "grocery" | "other";
-  inStock?: boolean;
+  stock?: number;
 }
 
 export interface ProductFilter {

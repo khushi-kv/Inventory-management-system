@@ -19,7 +19,11 @@ const productSchema: Record<string, FieldRule> = {
     type: "string",
     enum: ["electronics", "fashion", "grocery", "other"],
   },
-  inStock: { required: false, type: "boolean" },
+  stock: {
+    required: true,
+    type: "number",
+    min: 0,
+  },
 };
 
 interface ValidationResult {
@@ -28,14 +32,19 @@ interface ValidationResult {
   data: Partial<CreateProductDTO>;
 }
 
-export function validateCreateProduct(data: Record<string, unknown>): ValidationResult {
+export function validateCreateProduct(
+  data: Record<string, unknown>,
+): ValidationResult {
   const errors: string[] = [];
   const sanitized: Partial<CreateProductDTO> = {};
 
   for (const [field, rules] of Object.entries(productSchema)) {
     const value = data[field];
 
-    if (rules.required && (value === undefined || value === null || value === "")) {
+    if (
+      rules.required &&
+      (value === undefined || value === null || value === "")
+    ) {
       errors.push(`${field} is required`);
       continue;
     }
@@ -52,11 +61,6 @@ export function validateCreateProduct(data: Record<string, unknown>): Validation
       continue;
     }
 
-    if (rules.type === "boolean" && typeof value !== "boolean") {
-      errors.push(`${field} must be a boolean`);
-      continue;
-    }
-
     if (typeof value === "string") {
       if (rules.minLength && value.length < rules.minLength) {
         errors.push(`${field} must be at least ${rules.minLength} characters`);
@@ -68,12 +72,20 @@ export function validateCreateProduct(data: Record<string, unknown>): Validation
       }
     }
 
-    if (typeof value === "number" && rules.min !== undefined && value < rules.min) {
+    if (
+      typeof value === "number" &&
+      rules.min !== undefined &&
+      value < rules.min
+    ) {
       errors.push(`${field} must be at least ${rules.min}`);
       continue;
     }
 
-    if (rules.enum && typeof value === "string" && !rules.enum.includes(value)) {
+    if (
+      rules.enum &&
+      typeof value === "string" &&
+      !rules.enum.includes(value)
+    ) {
       errors.push(`${field} must be one of: ${rules.enum.join(", ")}`);
       continue;
     }

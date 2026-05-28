@@ -32,7 +32,7 @@ import {
         token,
         process.env.JWT_SECRET as string
       );
-  
+      // console.log(decoded);
       // Attach decoded user data to request
       (req as any).user = decoded;
   

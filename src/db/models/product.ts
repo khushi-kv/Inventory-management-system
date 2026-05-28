@@ -6,9 +6,10 @@ export interface IProduct extends Document {
   price: number;
   description?: string;
   category: "electronics" | "fashion" | "grocery" | "other";
-  inStock: boolean;
+  stock: number;
   createdAt: Date;
   updatedAt: Date;
+  createdBy: mongoose.Types.ObjectId;
 }
 
 const productSchema = new Schema<IProduct>(
@@ -34,12 +35,19 @@ const productSchema = new Schema<IProduct>(
       required: true,
       enum: ["electronics", "fashion", "grocery", "other"],
     },
-    inStock: {
-      type: Boolean,
-      default: true,
+    stock: {
+      type: Number,
+      default: 0,
+      required: [true, "Stock is required"],
+      min: [0, "Stock cannot be negative"],
+    },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default mongoose.model<IProduct>("Product", productSchema);

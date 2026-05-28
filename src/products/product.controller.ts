@@ -11,7 +11,10 @@ export const createProduct = asyncHandler(async (req: Request, res: Response) =>
     return apiResponse(res, 400, false, errors.join("; "));
   }
 
-  const product = await productService.createProduct(data);
+  const product = await productService.createProduct({
+    ...data,
+    createdBy: (req as any).user.userId
+  });
   return apiResponse(res, 201, true, "Product created successfully", product);
 });
 
