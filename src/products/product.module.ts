@@ -16,6 +16,7 @@ import {
 import { validateObjectId } from "../common/middleware/validateObjectId.js";
 
 import { authMiddleware } from "../common/middleware/authMiddleware.js";
+import { isAdmin } from "../common/middleware/isAdmin.js";
 const router = Router();
 /**
  * @swagger
@@ -43,7 +44,7 @@ const router = Router();
  *       201:
  *         description: Product created successfully
  */
-router.route("/").post(authMiddleware, createProduct).get(getProducts);
+router.route("/").post(authMiddleware, isAdmin, createProduct).get(getProducts);
 
 /**
  * @swagger
@@ -93,7 +94,13 @@ router.get("/:id", validateObjectId, getProductById);
  *       200:
  *         description: Product updated successfully
  */
-router.put("/:id", validateObjectId, updateProduct);
+router.put(
+  "/:id",
+  authMiddleware,
+  isAdmin,
+  validateObjectId,
+  updateProduct
+);
 
 /**
  * @swagger
@@ -112,6 +119,12 @@ router.put("/:id", validateObjectId, updateProduct);
  *       200:
  *         description: Product deleted successfully
  */
-router.delete("/:id", validateObjectId, deleteProduct);
+router.delete(
+  "/:id",
+  authMiddleware,
+  isAdmin,
+  validateObjectId,
+  deleteProduct
+);
 
 export default router;
