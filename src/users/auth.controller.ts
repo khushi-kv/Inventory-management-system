@@ -1,6 +1,6 @@
 // HTTP layer — parses request, delegates to service, sends response
 
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import authService from "./auth.service.js";
 import { validateRegister } from "./dto/register.dto.js";
 import { apiResponse } from "../common/utils/apiResponse.js";
@@ -19,46 +19,51 @@ export const registerUser = asyncHandler(
   },
 );
 
-export const loginUser = asyncHandler(
+export const loginUser = asyncHandler(async (req: Request, res: Response) => {
+  const { valid, errors, data } = validateLogin(req.body);
+
+  // Validation check
+  if (!valid) {
+    return apiResponse(res, 400, false, errors.join("; "));
+  }
+
+  // Call service
+  const loginData = await authService.loginUser(data.email, data.password);
+
+  // Send response
+  return apiResponse(res, 200, true, "Login successful", loginData);
+});
+
+export const logoutUser = asyncHandler(async (_req: Request, res: Response) => {
+  return apiResponse(res, 200, true, "Logout successful");
+});
+
+export const forgotPassword = asyncHandler(
   async (req: Request, res: Response) => {
-    const { valid, errors, data } = validateLogin(req.body);
-     
-    // Validation check
-    if (!valid) {
-      return apiResponse(
-        res,
-        400,
-        false,
-        errors.join("; ")
-      );
-    }
+    const { email } = req.body;
 
-    // Call service
-    const loginData = await authService.loginUser(
-      data.email,
-      data.password
-    );
+    const resetData = await authService.forgotPassword(email);
 
-    // Send response
+    //send response
     return apiResponse(
       res,
       200,
       true,
-      "Login successful",
-      loginData
+      "Reset token generated successfully",
+      resetData,
     );
-  }
-
-  
+  },
 );
 
-export const logoutUser = asyncHandler(
-  async (_req: Request, res: Response) => {
-    return apiResponse(
-      res,
-      200,
-      true,
-      "Logout successful"
-    );
-  }
+export const resetPassword = asyncHandler(
+  async (req: Request, res: Response) => {
+    console.log("RESET PASSWORD CONTROLLER HIT");
+    const token = req.params.token as string;
+
+    const { password } = req.body;
+
+    const result = await authService.resetPassword(token, password);
+
+    return apiResponse(res, 200, true, "Password reset successful", result);
+  },
 );

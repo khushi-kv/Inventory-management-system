@@ -36,7 +36,7 @@ interface ValidationResult {
 }
 
 export function validateRegister(
-  data: Record<string, unknown>
+  data: Record<string, unknown>,
 ): ValidationResult {
   const errors: string[] = [];
   const sanitized: Partial<IUser> = {};
@@ -44,7 +44,10 @@ export function validateRegister(
   for (const [field, rules] of Object.entries(registerSchema)) {
     const value = data[field];
 
-    if (rules.required && (value === undefined || value === null || value === "")) {
+    if (
+      rules.required &&
+      (value === undefined || value === null || value === "")
+    ) {
       errors.push(`${field} is required`);
       continue;
     }

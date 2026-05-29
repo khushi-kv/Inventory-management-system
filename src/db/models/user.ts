@@ -8,7 +8,9 @@ export interface IUser extends Document {
   password: string;
   createdAt: Date;
   updatedAt: Date;
-  role:string;
+  role: string;
+  resetPasswordToken: string;
+  resetPasswordExpires: Date;
 }
 
 const userSchema = new Schema<IUser>(
@@ -35,14 +37,20 @@ const userSchema = new Schema<IUser>(
       required: [true, "Password is required"],
       minlength: [6, "Password must be at least 6 characters"],
     },
-    role:{
-      type:String,
-      enum:["user","admin"],
-      default:"user",
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
+    resetPasswordToken: {
+      type: String,
+    },
 
-    }
+    resetPasswordExpires: {
+      type: Date,
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default mongoose.model<IUser>("User", userSchema);

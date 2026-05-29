@@ -1,5 +1,5 @@
 // Business logic layer — handles auth operations
-
+import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import User, { IUser } from "../db/models/user.js";
 import jwt, { type SignOptions } from "jsonwebtoken";
@@ -61,12 +61,13 @@ class AuthService {
       {
         userId: user._id,
         email: user.email,
-        role:user.role
+        role: user.role,
       },
       process.env.JWT_SECRET as string,
-  {
-    expiresIn: (process.env.JWT_EXPIRES_IN ?? "1d") as SignOptions["expiresIn"],
-  },
+      {
+        expiresIn: (process.env.JWT_EXPIRES_IN ??
+          "1d") as SignOptions["expiresIn"],
+      },
     );
 
     // Convert mongoose document to object
@@ -81,6 +82,77 @@ class AuthService {
       user: safeUser,
     };
   }
+
+  //forgot password
+  async forgotPassword(email: string) {
+    //find user
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      const error = new Error("User not found");
+
+      (error as Error & { statusCode: number }).statusCode = 404;
+
+      throw error;
+    }
+
+    //generate reset token
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    // Set expiry (15 mins)
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = new Date(Date.now() + 15 * 60 * 1000);
+
+    // Save updated user
+    await user.save();
+
+    // Return token temporarily for testing
+//     In real apps:
+
+// this is sent via EMAIL link
+// NOT returned in API response
+    return {
+      resetToken,
+    };
+  }
+
+  //reset password
+  async resetPassword(token: string, password: string) {
+    // console.log("Incoming token:", token);
+    // Find user by token
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: new Date() },
+    });
+  
+    // console.log("Matched user:", user);
+    // Check token validity
+    if (!user) {
+      const error = new Error("Invalid or expired token");
+  
+      (error as Error & { statusCode: number }).statusCode = 400;
+  
+      throw error;
+    }
+  
+    // Hash new password
+    const hashedPassword = await bcrypt.hash(password, 10);
+  
+    // Update password
+    user.password = hashedPassword;
+  
+    // Clear reset fields after usage 
+    user.resetPasswordToken = "";
+    user.resetPasswordExpires = new Date(0);
+  
+    // Save updated user
+    await user.save();
+  
+    return {
+      message: "Password reset successful",
+    };
+  }
+
+   
 }
 
 export default new AuthService();

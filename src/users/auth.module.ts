@@ -6,7 +6,7 @@
  */
 
 import { Router } from "express";
-import { registerUser, loginUser, logoutUser } from "./auth.controller.js";
+import { registerUser, loginUser, logoutUser, forgotPassword, resetPassword } from "./auth.controller.js";
 import { authMiddleware } from "../common/middleware/authMiddleware.js";
 
 const router = Router();
@@ -86,4 +86,66 @@ router.post(
     authMiddleware,
     logoutUser
   );
+
+
+/**
+ * @swagger
+ * /api/v1/auth/forgot-password:
+ *   post:
+ *     summary: Generate reset password token
+ *     tags:
+ *       - Auth
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: test@gmail.com
+ *     responses:
+ *       200:
+ *         description: Reset token generated successfully
+ *       404:
+ *         description: User not found
+ */
+  router.post("/forgot-password", forgotPassword);
+
+
+  /**
+ * @swagger
+ * /api/v1/auth/reset-password/{token}:
+ *   post:
+ *     summary: Reset user password
+ *     tags:
+ *       - Auth
+ *     parameters:
+ *       - in: path
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - password
+ *             properties:
+ *               password:
+ *                 type: string
+ *                 example: newPassword123
+ *     responses:
+ *       200:
+ *         description: Password reset successful
+ *       400:
+ *         description: Invalid or expired token
+ */
+  router.post("/reset-password/:token", resetPassword);
 export default router;
