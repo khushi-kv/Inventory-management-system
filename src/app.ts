@@ -4,9 +4,10 @@ import helmet from "helmet";
 import morgan from "morgan";
 
 import productRouter from "./products/product.module.js";
-import authRouter from "./users/auth.module.js"
+import authRouter from "./users/auth.module.js";
 import { swaggerSpec } from "./config/swagger.js";
 import swaggerUi from "swagger-ui-express";
+import { globalRateLimiter } from "./common/middleware/rateLimit.middleware.js";
 // console.log("NODE_ENV in app.ts:", process.env.NODE_ENV);
 const app = express();
 
@@ -29,7 +30,7 @@ app.use(
   cors({
     origin: process.env.CORS_ORIGIN?.split(","),
     credentials: true,
-  })
+  }),
 );
 
 /**
@@ -37,6 +38,7 @@ app.use(
  */
 app.use(express.json());
 
+app.use(globalRateLimiter);
 /**
  * API Routes
  */
