@@ -20,6 +20,9 @@ This project was built to explore backend engineering concepts such as authentic
 
 ---
 
+> 🔐 **Note:** Admin-only endpoints (Create, Update, Delete product) are restricted in the live demo.  
+> A default user account is seeded for testing — admin access is intentionally disabled for security.
+
 ## Features
 
 ### Authentication & Security
