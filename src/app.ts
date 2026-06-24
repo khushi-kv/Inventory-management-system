@@ -8,6 +8,7 @@ import authRouter from "./users/auth.module.js";
 import { swaggerSpec } from "./config/swagger.js";
 import swaggerUi from "swagger-ui-express";
 import { globalRateLimiter } from "./common/middleware/rateLimit.middleware.js";
+import { errorHandler } from "./common/middleware/errorMiddleware.js";
 // console.log("NODE_ENV in app.ts:", process.env.NODE_ENV);
 const app = express();
 
@@ -49,4 +50,5 @@ app.use("/api/v1/products", productRouter);
  */
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/v1/auth", authRouter);
+app.use(errorHandler);
 export default app;
