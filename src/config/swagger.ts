@@ -12,7 +12,7 @@ const options: swaggerJsdoc.Options = {
       {
         url:
           process.env.NODE_ENV === "production"
-            ? "https://inventory-management-system-dhhj.onrender.com/api/v1"
+            ? `${process.env.API_BASE_URL}/api/v1`
             : "http://localhost:5001/api/v1",
       },
     ],
