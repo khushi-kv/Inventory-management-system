@@ -12,8 +12,8 @@ const options: swaggerJsdoc.Options = {
       {
         url:
           process.env.NODE_ENV === "production"
-            ? `${process.env.API_BASE_URL}/api/v1`
-            : "http://localhost:5001/api/v1",
+            ? process.env.API_BASE_URL
+            : "http://localhost:5001",
       },
     ],
 
