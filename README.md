@@ -2,73 +2,80 @@
 
 A production-style backend application built with Node.js, Express.js, TypeScript, and MongoDB following a layered architecture:
 
-**Controller → Service → Repository → Database**
+```
+Controller → Service → Repository → Database
+```
 
 This project was built to explore backend engineering concepts such as authentication, authorization, API design, validation, security, documentation, and scalable application structure.
+
+---
+
+## 🚀 Live Demo
+
+> **Swagger API Docs (Live):** https://inventory-management-system-dhhj.onrender.com/api-docs/
+
+> ⚠️ Hosted on Render's free tier — may take ~30–60 seconds to wake up on first request.
+
+![Live](https://img.shields.io/badge/Live-Render-brightgreen)
 
 ---
 
 ## Features
 
 ### Authentication & Security
-
-* User Registration
-* User Login
-* User Logout
-* JWT Authentication
-* Password Hashing using bcryptjs
-* Protected Routes
-* Forgot Password Flow
-* Reset Password Flow
-* Express Rate Limiting
-* Helmet Security Middleware
+- User Registration
+- User Login
+- User Logout
+- JWT Authentication
+- Password Hashing using bcryptjs
+- Protected Routes
+- Forgot Password Flow
+- Reset Password Flow
+- Express Rate Limiting
+- Helmet Security Middleware
 
 ### Authorization
-
-* Role-Based Access Control (RBAC)
-* Admin-only Product Management
-* Product Ownership (`createdBy`)
+- Role-Based Access Control (RBAC)
+- Admin-only Product Management
+- Product Ownership (createdBy)
 
 ### Product Management
-
-* Create Product
-* Update Product
-* Delete Product
-* Get Product by ID
-* Get All Products
-* Inventory Stock Management
+- Create Product
+- Update Product
+- Delete Product
+- Get Product by ID
+- Get All Products
+- Inventory Stock Management
 
 ### API Enhancements
-
-* Pagination
-* Filtering
-* Sorting
-* Request Validation
-* Centralized Error Handling
-* Standardized API Responses
+- Pagination
+- Filtering
+- Sorting
+- Request Validation
+- Centralized Error Handling
+- Standardized API Responses
 
 ### Documentation
-
-* Swagger API Documentation
-* Bearer Token Support in Swagger UI
+- Swagger API Documentation
+- Bearer Token Support in Swagger UI
 
 ---
 
 ## Tech Stack
 
-| Category             | Technology                   |
-| -------------------- | ---------------------------- |
-| Runtime              | Node.js                      |
-| Framework            | Express.js 5                 |
-| Language             | TypeScript                   |
-| Database             | MongoDB Atlas                |
-| ODM                  | Mongoose                     |
-| Authentication       | JWT (jsonwebtoken)           |
-| Password Security    | bcryptjs                     |
-| Documentation        | Swagger                      |
-| Security             | Helmet, Express Rate Limiter |
-| Logging              | Morgan                       |
-| Cross-Origin Support | CORS                         |
+| Category | Technology |
+|----------|------------|
+| Runtime | Node.js |
+| Framework | Express.js 5 |
+| Language | TypeScript |
+| Database | MongoDB Atlas |
+| ODM | Mongoose |
+| Authentication | JWT (jsonwebtoken) |
+| Password Security | bcryptjs |
+| Documentation | Swagger |
+| Security | Helmet, Express Rate Limiter |
+| Logging | Morgan |
+| Cross-Origin Support | CORS |
 
 ---
 
@@ -76,7 +83,7 @@ This project was built to explore backend engineering concepts such as authentic
 
 The application follows a layered architecture for better separation of concerns and maintainability.
 
-```text
+```
 Request
    ↓
 Router
@@ -95,25 +102,21 @@ MongoDB
 ### Layer Responsibilities
 
 **Controller**
-
-* Handles HTTP requests and responses
-* Extracts request parameters
-* Delegates business logic to services
+- Handles HTTP requests and responses
+- Extracts request parameters
+- Delegates business logic to services
 
 **Service**
-
-* Contains business logic
-* Performs validations and authorization checks
-* Coordinates repository operations
+- Contains business logic
+- Performs validations and authorization checks
+- Coordinates repository operations
 
 **Repository**
-
-* Handles database interactions
-* Encapsulates Mongoose queries
+- Handles database interactions
+- Encapsulates Mongoose queries
 
 **Database**
-
-* MongoDB Atlas using Mongoose ODM
+- MongoDB Atlas using Mongoose ODM
 
 ---
 
@@ -132,73 +135,61 @@ MongoDB
 }
 ```
 
-### Validation Rules
+---
 
-| Field       | Validation                   |
-| ----------- | ---------------------------- |
-| name        | Required, 3–100 characters   |
-| price       | Required, ≥ 0                |
+## Validation Rules
+
+| Field | Validation |
+|-------|------------|
+| name | Required, 3–100 characters |
+| price | Required, ≥ 0 |
 | description | Optional, max 500 characters |
-| category    | Required enum value          |
-| stock       | Required, ≥ 0                |
-| createdBy   | Required ObjectId reference  |
+| category | Required enum value |
+| stock | Required, ≥ 0 |
+| createdBy | Required ObjectId reference |
 
 ---
 
 ## Installation
 
 ### Clone Repository
-
 ```bash
 git clone <your-repository-url>
 cd inventory-management-api
 ```
 
 ### Install Dependencies
-
 ```bash
 npm install
 ```
 
 ### Configure Environment Variables
-
 Create a `.env` file:
 
 ```env
 PORT=5001
-
 MONGO_URI=your_mongodb_connection_string
-
 JWT_SECRET=your_jwt_secret
-
 JWT_EXPIRES_IN=7d
-
 CLIENT_URL=http://localhost:3000
 ```
 
 ### Start Development Server
-
 ```bash
 npm run dev
 ```
 
 ### Build Project
-
 ```bash
 npm run build
 ```
 
 ### Run Production Build
-
 ```bash
 npm start
 ```
 
-Server runs on:
-
-```text
-http://localhost:5001
-```
+Server runs on: `http://localhost:5001`
 
 ---
 
@@ -206,47 +197,31 @@ http://localhost:5001
 
 ### Authentication
 
-| Method | Endpoint                           | Description          |
-| ------ | ---------------------------------- | -------------------- |
-| POST   | /api/v1/auth/register              | Register user        |
-| POST   | /api/v1/auth/login                 | Login user           |
-| POST   | /api/v1/auth/logout                | Logout user          |
-| POST   | /api/v1/auth/forgot-password       | Generate reset token |
-| POST   | /api/v1/auth/reset-password/:token | Reset password       |
-
----
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | /api/v1/auth/register | Register user |
+| POST | /api/v1/auth/login | Login user |
+| POST | /api/v1/auth/logout | Logout user |
+| POST | /api/v1/auth/forgot-password | Generate reset token |
+| POST | /api/v1/auth/reset-password/:token | Reset password |
 
 ### Products
 
-| Method | Endpoint             | Description            |
-| ------ | -------------------- | ---------------------- |
-| POST   | /api/v1/products     | Create Product (Admin) |
-| GET    | /api/v1/products     | List Products          |
-| GET    | /api/v1/products/:id | Get Product            |
-| PUT    | /api/v1/products/:id | Update Product (Admin) |
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | /api/v1/products | Create Product (Admin) |
+| GET | /api/v1/products | List Products |
+| GET | /api/v1/products/:id | Get Product |
+| PUT | /api/v1/products/:id | Update Product (Admin) |
 | DELETE | /api/v1/products/:id | Delete Product (Admin) |
-
----
 
 ### Query Parameters
 
-```http
+```
 GET /api/v1/products?page=1
-```
-
-```http
 GET /api/v1/products?limit=10
-```
-
-```http
 GET /api/v1/products?category=electronics
-```
-
-```http
 GET /api/v1/products?minPrice=100&maxPrice=1000
-```
-
-```http
 GET /api/v1/products?sort=price
 ```
 
@@ -255,7 +230,6 @@ GET /api/v1/products?sort=price
 ## Standard API Response
 
 ### Success Response
-
 ```json
 {
   "success": true,
@@ -265,7 +239,6 @@ GET /api/v1/products?sort=price
 ```
 
 ### Error Response
-
 ```json
 {
   "success": false,
@@ -277,45 +250,45 @@ GET /api/v1/products?sort=price
 
 ## Swagger Documentation
 
-Swagger UI is available at:
+| Environment | URL |
+|-------------|-----|
+| Local | http://localhost:5001/api-docs |
+| Live (Render) | https://inventory-management-system-dhhj.onrender.com/api-docs/ |
 
-```text
-http://localhost:5001/api-docs
-```
-
-Features:
-
-* Interactive API Testing
-* Request/Response Schemas
-* Bearer Token Authentication Support
-* Endpoint Documentation
+### Features
+- Interactive API Testing
+- Request/Response Schemas
+- Bearer Token Authentication Support
+- Endpoint Documentation
 
 ---
 
 ## Security Features
 
-* JWT-based Authentication
-* Password Hashing using bcryptjs
-* Role-Based Access Control
-* Protected Routes
-* Rate Limiting
-* Helmet Security Headers
-* Environment Variable Configuration
+- JWT-based Authentication
+- Password Hashing using bcryptjs
+- Role-Based Access Control
+- Protected Routes
+- Rate Limiting
+- Helmet Security Headers
+- Environment Variable Configuration
+
+---
+
+## Deployment
+
+- Hosted on **Render** (free tier)
+- MongoDB hosted on **MongoDB Atlas**
+- Environment variables configured via Render's dashboard
+
+> ⚠️ Free tier instances spin down after inactivity — expect a ~30–60 second cold start on first request.
 
 ---
 
 ## Future Improvements
 
-* Unit & Integration Testing
-* Docker Support
-* Refresh Token Strategy
-* CI/CD Pipeline
-* Redis Caching
-
----
-
-## Author
-
-Khushi Verma
-
-Frontend Engineer transitioning into Full-Stack Development through hands-on backend projects built with Node.js, Express.js, TypeScript, and MongoDB.
+- Unit & Integration Testing
+- Docker Support
+- Refresh Token Strategy
+- CI/CD Pipeline
+- Redis Caching
